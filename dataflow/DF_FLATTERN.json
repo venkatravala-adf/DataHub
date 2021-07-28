@@ -1,0 +1,32 @@
+{
+	"name": "DF_FLATTERN",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_JSON_FLATTERN",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText6",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Flatten1"
+				}
+			],
+			"script": "source(output(\n\t\tfirstName as string,\n\t\tlastName as string,\n\t\tgender as string,\n\t\tage as string,\n\t\taddress as (State as string, country as string, ZIP as string),\n\t\tskills as string[]\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tlimit: 100,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'singleDocument',\n\tpartitionBy('hash', 1)) ~> source1\nsource1 foldDown(unroll(skills),\n\tmapColumn(\n\t\tskills,\n\t\tfirstName,\n\t\tgender,\n\t\tage\n\t),\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> Flatten1\nFlatten1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tDEPT_ID as string,\n\t\tDEPT_NAME as string\n\t),\n\tpartitionFileNames:['flat.csv'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink1"
+		}
+	}
+}

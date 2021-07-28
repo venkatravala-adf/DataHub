@@ -1,0 +1,32 @@
+{
+	"name": "DF_AGGRRIGATE",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_TXT_BLOB",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_TARGET_BLOB",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Aggregate1"
+				}
+			],
+			"script": "source(output(\n\t\temp_id as integer '000',\n\t\temp_name as string,\n\t\t{ emp_sal} as integer '000',\n\t\temp_location as string,\n\t\temp_deptID as integer '000'\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 aggregate(groupBy(emp_deptID),\n\tSumOfSalary = sum({ emp_sal})) ~> Aggregate1\nAggregate1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['empDetails_Salary.txt'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tmapColumn(\n\t\temp_deptID,\n\t\tSumOfSalary\n\t),\n\tpartitionBy('hash', 1)) ~> sink1"
+		}
+	}
+}

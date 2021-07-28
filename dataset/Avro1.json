@@ -1,0 +1,19 @@
+{
+	"name": "Avro1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_BLOB_USING_KEY_VAULT",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Avro",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "simhacontainer"
+			}
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

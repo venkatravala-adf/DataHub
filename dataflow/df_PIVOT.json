@@ -1,0 +1,32 @@
+{
+	"name": "df_PIVOT",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_PIVOT",
+						"type": "DatasetReference"
+					},
+					"name": "EMP"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_SQL_PIVOT_TABLE",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "PivotEMP"
+				}
+			],
+			"script": "source(output(\n\t\tEmP_ID as integer,\n\t\tNAME as string,\n\t\tDEPT as string,\n\t\tSALARY as long,\n\t\tLOCATION as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tlimit: 100,\n\tignoreNoFilesFound: false) ~> EMP\nEMP pivot(groupBy(DEPT),\n\tpivotBy(LOCATION),\n\t{} = sum(toInteger(SALARY)),\n\tcolumnNaming: '$N$V',\n\tlateral: true,\n\tpartitionBy('hash', 1)) ~> PivotEMP\nPivotEMP sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError',\n\tpartitionBy('hash', 1)) ~> sink1"
+		}
+	}
+}

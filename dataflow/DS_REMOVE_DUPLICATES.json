@@ -1,0 +1,32 @@
+{
+	"name": "DS_REMOVE_DUPLICATES",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_TEST",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_TARGET_BLOB",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Aggregate1"
+				}
+			],
+			"script": "source(output(\n\t\temp_id as integer,\n\t\temp_name as string,\n\t\t{ emp_sal} as string,\n\t\temp_location as string,\n\t\temp_deptID as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 aggregate(groupBy(emp_id),\n\teach(match(name!='emp_id'), $$ = last($$))) ~> Aggregate1\nAggregate1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['RemoveDuplicates.txt'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tmapColumn(\n\t\temp_id,\n\t\temp_name,\n\t\t{ emp_sal},\n\t\temp_location,\n\t\temp_deptID\n\t),\n\tpartitionBy('hash', 1)) ~> sink1"
+		}
+	}
+}

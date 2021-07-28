@@ -1,0 +1,45 @@
+{
+	"name": "DS_PIVOT",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_BLOB_USING_KEY_VAULT",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "PIVOT.csv",
+				"container": "dataflow"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "EmP_ID",
+				"type": "String"
+			},
+			{
+				"name": "NAME",
+				"type": "String"
+			},
+			{
+				"name": "DEPT",
+				"type": "String"
+			},
+			{
+				"name": "SALARY",
+				"type": "String"
+			},
+			{
+				"name": "LOCATION",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,44 @@
+{
+	"name": "Json1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_BLOB_USING_KEY_VAULT",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "dataflow"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"partNo": {
+					"type": "string"
+				},
+				"PartDesc": {
+					"type": "string"
+				},
+				"Division": {
+					"type": "string"
+				},
+				"Plant": {
+					"type": "string"
+				},
+				"MRP": {
+					"type": "string"
+				},
+				"PRICE": {
+					"type": "string"
+				},
+				"GST": {
+					"type": "string"
+				}
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,46 @@
+{
+	"name": "DF_CONDITIOANAL_SPLIT",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_BLOB_TEXT_DF",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_CSV_TARGET",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_JSON",
+						"type": "DatasetReference"
+					},
+					"name": "sink2"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_TARGET_TEXT",
+						"type": "DatasetReference"
+					},
+					"name": "sink3"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Split"
+				}
+			],
+			"script": "source(output(\n\t\tpartNo as string,\n\t\tPartDesc as string,\n\t\tDivision as string,\n\t\tPlant as string,\n\t\tMRP as string,\n\t\tPRICE as string,\n\t\tGST as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 split(Division == '11',\n\tDivision == '22',\n\tdisjoint: false) ~> Split@(DIVISION11, DIVISION22, OTHERS)\nSplit@DIVISION11 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['MaterialMaster_Division11.csv'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink1\nSplit@DIVISION22 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['MaterialMaster_22.json'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink2\nSplit@OTHERS sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['MaterialMaster.txt'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink3"
+		}
+	}
+}

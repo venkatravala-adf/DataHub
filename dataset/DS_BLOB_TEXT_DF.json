@@ -1,0 +1,53 @@
+{
+	"name": "DS_BLOB_TEXT_DF",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_BLOB_USING_KEY_VAULT",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "partdetails.txt",
+				"container": "dataflow"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "partNo",
+				"type": "String"
+			},
+			{
+				"name": "PartDesc",
+				"type": "String"
+			},
+			{
+				"name": "Division",
+				"type": "String"
+			},
+			{
+				"name": "Plant",
+				"type": "String"
+			},
+			{
+				"name": "MRP",
+				"type": "String"
+			},
+			{
+				"name": "PRICE",
+				"type": "String"
+			},
+			{
+				"name": "GST",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

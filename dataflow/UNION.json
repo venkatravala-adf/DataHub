@@ -1,0 +1,39 @@
+{
+	"name": "UNION",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_Smaster",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_target2",
+						"type": "DatasetReference"
+					},
+					"name": "source2"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Json1",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Union1"
+				}
+			],
+			"script": "source(output(\n\t\tName as string,\n\t\tcountry as string,\n\t\tActive as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource(output(\n\t\tName as string,\n\t\tcountry as string,\n\t\tActive as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source2\nsource1, source2 union(byName: true,\n\tpartitionBy('hash', 1))~> Union1\nUnion1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tpartNo as string,\n\t\tPartDesc as string,\n\t\tDivision as string,\n\t\tPlant as string,\n\t\tMRP as string,\n\t\tPRICE as string,\n\t\tGST as string\n\t),\n\tpartitionFileNames:['unionData.json'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink1"
+		}
+	}
+}

@@ -1,0 +1,42 @@
+{
+	"name": "DF_LOOKUP",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "AzureSqlTable1",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "AzureSqlTable2",
+						"type": "DatasetReference"
+					},
+					"name": "source2"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "AzureSqlTable5",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "LOOKUPEXAM"
+				},
+				{
+					"name": "Select1"
+				}
+			],
+			"script": "source(output(\n\t\tEMP_ID as integer,\n\t\temp_name as string,\n\t\temp_sal as integer,\n\t\temp_location as string,\n\t\tdept_id as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> source1\nsource(output(\n\t\tDept_id as integer,\n\t\tdept_name as string,\n\t\tdept_location as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> source2\nsource1, source2 lookup(source1@dept_id == source2@Dept_id,\n\tmultiple: false,\n\tpickup: 'any',\n\tpartitionBy('hash', 1),\n\tbroadcast: 'auto')~> LOOKUPEXAM\nLOOKUPEXAM select(mapColumn(\n\t\tEMPLOYEEID = EMP_ID,\n\t\tNAME = emp_name,\n\t\temp_sal,\n\t\temp_location,\n\t\tdept_id_EMP = source1@dept_id,\n\t\tDept_id = source2@Dept_id,\n\t\tdept_name,\n\t\tdept_location\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nSelect1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1"
+		}
+	}
+}

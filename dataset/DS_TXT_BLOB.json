@@ -1,0 +1,45 @@
+{
+	"name": "DS_TXT_BLOB",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_BLOB_USING_KEY_VAULT",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "EmployeeDetails.txt",
+				"container": "input"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "emp_id",
+				"type": "String"
+			},
+			{
+				"name": "emp_name",
+				"type": "String"
+			},
+			{
+				"name": " emp_sal",
+				"type": "String"
+			},
+			{
+				"name": "emp_location",
+				"type": "String"
+			},
+			{
+				"name": "emp_deptID",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

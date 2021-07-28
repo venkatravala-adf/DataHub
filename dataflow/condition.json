@@ -1,0 +1,46 @@
+{
+	"name": "condition",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_BLOB_TEXT_FILE",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_BLOB_TARGET",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_BLOB_TARGET",
+						"type": "DatasetReference"
+					},
+					"name": "sink2"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_BLOB_TEXT_FILE",
+						"type": "DatasetReference"
+					},
+					"name": "sink3"
+				}
+			],
+			"transformations": [
+				{
+					"name": "ConditionalSplit1"
+				}
+			],
+			"script": "source(output(\n\t\tpartNo as string,\n\t\tPartDesc as string,\n\t\tDivision as string,\n\t\tPlant as string,\n\t\tMRP as string,\n\t\tPRICE as string,\n\t\tGST as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 split(Division == '11',\n\tDivision == '22',\n\tdisjoint: false,\n\tpartitionBy('hash', 1)) ~> ConditionalSplit1@(DIVISION11, DIVISION22, Others)\nConditionalSplit1@DIVISION11 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['TPartsMaster_11.txt'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink1\nConditionalSplit1@DIVISION22 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['TPartsMaster_22.txt'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink2\nConditionalSplit1@Others sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tpartNo as string,\n\t\tPartDesc as string,\n\t\tDivision as string,\n\t\tPlant as string,\n\t\tMRP as string,\n\t\tPRICE as string,\n\t\tGST as string\n\t),\n\tpartitionFileNames:['TPartsMaster_75.txt'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink3"
+		}
+	}
+}

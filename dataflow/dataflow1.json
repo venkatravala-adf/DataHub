@@ -1,0 +1,32 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText1",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText2",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Pivot1"
+				}
+			],
+			"script": "source(output(\n\t\tEmP_ID as integer,\n\t\tNAME as string,\n\t\tDEPT as string,\n\t\tSALARY as double,\n\t\tLOCATION as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 pivot(groupBy(DEPT),\n\tpivotBy(LOCATION),\n\t{} = sum(toInteger(SALARY)),\n\tcolumnNaming: '$N$V',\n\tlateral: true) ~> Pivot1\nPivot1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['pivot.csv'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink1"
+		}
+	}
+}

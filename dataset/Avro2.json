@@ -1,0 +1,106 @@
+{
+	"name": "Avro2",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_BLOB_USING_KEY_VAULT",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Avro",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "part-00000-tid-7789522193464198305-2677e545-da99-4c15-9902-7c688182886f-84-1-c000.avro",
+				"container": "simhacontainer"
+			}
+		},
+		"schema": {
+			"type": "record",
+			"name": "topLevelRecord",
+			"fields": [
+				{
+					"name": "emp_name",
+					"type": [
+						"string",
+						"null"
+					]
+				},
+				{
+					"name": "gender",
+					"type": [
+						"string",
+						"null"
+					]
+				},
+				{
+					"name": "skills",
+					"type": [
+						"string",
+						"null"
+					]
+				},
+				{
+					"name": "address",
+					"type": [
+						"string",
+						"null"
+					]
+				},
+				{
+					"name": "ParseSkill",
+					"type": {
+						"type": "record",
+						"name": "topLevelRecord.ParseSkill",
+						"fields": [
+							{
+								"name": "skill1",
+								"type": [
+									"string",
+									"null"
+								]
+							},
+							{
+								"name": "skill2",
+								"type": [
+									"string",
+									"null"
+								]
+							},
+							{
+								"name": "skill3",
+								"type": [
+									"string",
+									"null"
+								]
+							}
+						]
+					}
+				},
+				{
+					"name": "ParseAddress",
+					"type": {
+						"type": "record",
+						"name": "topLevelRecord.ParseAddress",
+						"fields": [
+							{
+								"name": "state",
+								"type": [
+									"string",
+									"null"
+								]
+							},
+							{
+								"name": "country",
+								"type": [
+									"string",
+									"null"
+								]
+							}
+						]
+					}
+				}
+			]
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

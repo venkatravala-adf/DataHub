@@ -1,0 +1,45 @@
+{
+	"name": "DF_SURROGATE_KEY",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_PROC",
+						"type": "DatasetReference"
+					},
+					"name": "MAXID"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_CSV",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_SQL_STATEMASTER",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Join1"
+				},
+				{
+					"name": "SurrogateKey1"
+				},
+				{
+					"name": "DerivedColumn1"
+				}
+			],
+			"script": "source(output(\n\t\tmax_ID as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tlimit: 100,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tprocedureName: 'sp_get_maxID',\n\tschemaName: 'dbo',\n\tresultSet: true,\n\tformat: 'procedure',\n\tpartitionBy('hash', 1)) ~> MAXID\nsource(output(\n\t\tName as string,\n\t\tcountry as string,\n\t\tActive as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tlimit: 100,\n\tignoreNoFilesFound: false) ~> source1\nMAXID, source1 join(1==1,\n\tjoinType:'cross',\n\tpartitionBy('hash', 1),\n\tbroadcast: 'auto')~> Join1\nJoin1 keyGenerate(output(STATEID as long),\n\tstartAt: 1L,\n\tpartitionBy('hash', 1)) ~> SurrogateKey1\nSurrogateKey1 derive(SrNo = toInteger(max_ID+STATEID),\n\tpartitionBy('hash', 1)) ~> DerivedColumn1\nDerivedColumn1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tSTateID as integer,\n\t\tName as string,\n\t\tcountry as string,\n\t\tActive as string\n\t),\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tSTateID = SrNo,\n\t\tName,\n\t\tcountry,\n\t\tActive\n\t)) ~> sink1"
+		}
+	}
+}

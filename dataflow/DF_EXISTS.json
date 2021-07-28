@@ -1,0 +1,39 @@
+{
+	"name": "DF_EXISTS",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_EMP_CSV",
+						"type": "DatasetReference"
+					},
+					"name": "EMP"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_DEPT_CSV",
+						"type": "DatasetReference"
+					},
+					"name": "DEPT"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText3",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Exists1"
+				}
+			],
+			"script": "source(output(\n\t\tEMP_ID as integer,\n\t\tNAME as string,\n\t\tDEPT_ID as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> EMP\nsource(output(\n\t\tDEPT_ID as integer,\n\t\tDEPT_NAME as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> DEPT\nEMP, DEPT exists(EMP@DEPT_ID == DEPT@DEPT_ID,\n\tnegate:true,\n\tbroadcast: 'auto')~> Exists1\nExists1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['EXITS.csv'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink1"
+		}
+	}
+}

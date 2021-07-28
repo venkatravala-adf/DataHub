@@ -1,0 +1,34 @@
+{
+	"name": "DS_SQL_PARSE",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_AZURE_SQL",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "emp_name",
+				"type": "varchar"
+			},
+			{
+				"name": "gender",
+				"type": "varchar"
+			},
+			{
+				"name": "skills",
+				"type": "varchar"
+			},
+			{
+				"name": "address",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "TEMpSKILLDETAILS"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,41 @@
+{
+	"name": "AzureSqlTable1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_AZURE_SQL",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "EMP_ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "emp_name",
+				"type": "varchar"
+			},
+			{
+				"name": "emp_sal",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "emp_location",
+				"type": "varchar"
+			},
+			{
+				"name": "dept_id",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "TEmployeeMaster"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

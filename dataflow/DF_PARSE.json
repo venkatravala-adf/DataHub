@@ -1,0 +1,42 @@
+{
+	"name": "DF_PARSE",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_SQL_PARSE",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "Avro2",
+						"type": "DatasetReference"
+					},
+					"name": "source2"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Avro1",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Parse1"
+				},
+				{
+					"name": "Parse2"
+				}
+			],
+			"script": "source(output(\n\t\temp_name as string,\n\t\tgender as string,\n\t\tskills as string,\n\t\taddress as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table',\n\tpartitionBy('hash', 1)) ~> source1\nsource(output(\n\t\temp_name as string,\n\t\tgender as string,\n\t\tskills as string,\n\t\taddress as string,\n\t\tParseSkill as (skill1 as string, skill2 as string, skill3 as string),\n\t\tParseAddress as (state as string, country as string)\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source2\nsource1 parse(ParseSkill = skills ? (skill1 as string,\n\t\tskill2 as string,\n\t\tskill3 as string),\n\tformat: 'delimited',\n\tcolumnNamesAsHeader: false,\n\tcolumnDelimiter: '|',\n\tnullValue: '') ~> Parse1\nParse1 parse(ParseAddress = address ? (state as string,\n\t\tcountry as string),\n\tformat: 'json',\n\tdocumentForm: 'singleDocument') ~> Parse2\nParse2 sink(allowSchemaDrift: true,\n\tvalidateSchema: true,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink1"
+		}
+	}
+}

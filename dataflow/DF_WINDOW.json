@@ -1,0 +1,32 @@
+{
+	"name": "DF_WINDOW",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText4",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText5",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Window1"
+				}
+			],
+			"script": "source(output(\n\t\tEMPID as integer,\n\t\tEMPNAME as string,\n\t\tDEPT as string,\n\t\tGENDER as string,\n\t\tSALARY as double\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 window(over(DEPT),\n\tdesc(SALARY, true),\n\tDenseRank = denseRank(),\n\tpartitionBy('hash', 1)) ~> Window1\nWindow1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tDEPT_ID as string,\n\t\tDEPT_NAME as string\n\t),\n\tpartitionFileNames:['window_Dense.csv'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink1"
+		}
+	}
+}

@@ -1,0 +1,56 @@
+{
+	"name": "DS_JSON_FLATTERN",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_BLOB_USING_KEY_VAULT",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "employee.json",
+				"container": "dataflow"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"firstName": {
+					"type": "string"
+				},
+				"lastName": {
+					"type": "string"
+				},
+				"gender": {
+					"type": "string"
+				},
+				"age": {
+					"type": "integer"
+				},
+				"address": {
+					"type": "object",
+					"properties": {
+						"State": {
+							"type": "string"
+						},
+						"country": {
+							"type": "string"
+						},
+						"ZIP": {
+							"type": "string"
+						}
+					}
+				},
+				"skills": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				}
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
