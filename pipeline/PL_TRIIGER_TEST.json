@@ -24,7 +24,10 @@
 				"typeProperties": {
 					"url": "https://prod-51.eastus.logic.azure.com:443/workflows/73a2774e140642879ed4c2d4158c3958/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=KII99fQCi9eEyHFgD_e9UgnRlkDUk6PCwNJLiACST1A",
 					"method": "POST",
-					"body": "{\n\n\"pipelineName\":\" @{pipeline().Pipeline}\"\n\n\"ErrorMessage\":\" @{activity('Copy data1').Error.Message}\"\n\n}"
+					"body": {
+						"value": "{\n\n\"PipelineName\" : \"PLNAME\"\n\n}",
+						"type": "Expression"
+					}
 				}
 			},
 			{
