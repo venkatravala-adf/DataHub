@@ -1,0 +1,117 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "ADFJuly14"
+		},
+		"AzureSynapseAnalytics1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSynapseAnalytics1'"
+		},
+		"AzureSynapseAnalytics2_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSynapseAnalytics2'"
+		},
+		"LS_AZURE_SQL_properties_typeProperties_connectionString_secretName": {
+			"type": "string",
+			"defaultValue": "DBSTRING"
+		},
+		"LS_BLOB_USING_KEY_VAULT_properties_typeProperties_connectionString_secretName": {
+			"type": "string",
+			"defaultValue": "Blobstorage"
+		},
+		"LS_KEY_VAULT_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://keyvaultblobstore.vault.azure.net/"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "ADFJuly14_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"AzureSynapseAnalytics1_connectionString": {
+						"value": "[parameters('AzureSynapseAnalytics1_connectionString')]"
+					},
+					"AzureSynapseAnalytics2_connectionString": {
+						"value": "[parameters('AzureSynapseAnalytics2_connectionString')]"
+					},
+					"LS_KEY_VAULT_properties_typeProperties_baseUrl": {
+						"value": "[parameters('LS_KEY_VAULT_properties_typeProperties_baseUrl')]"
+					},
+					"LS_AZURE_SQL_properties_typeProperties_connectionString_secretName": {
+						"value": "[parameters('LS_AZURE_SQL_properties_typeProperties_connectionString_secretName')]"
+					},
+					"LS_BLOB_USING_KEY_VAULT_properties_typeProperties_connectionString_secretName": {
+						"value": "[parameters('LS_BLOB_USING_KEY_VAULT_properties_typeProperties_connectionString_secretName')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "ADFJuly14_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'ADFJuly14_ArmTemplate_0')]"
+			]
+		},
+		{
+			"name": "ADFJuly14_ArmTemplate_2",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_2.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'ADFJuly14_ArmTemplate_1')]"
+			]
+		}
+	]
+}

@@ -1,0 +1,30 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "ADFJuly14"
+		},
+		"AzureSynapseAnalytics1_connectionString": {
+			"value": ""
+		},
+		"AzureSynapseAnalytics2_connectionString": {
+			"value": ""
+		},
+		"LS_AZURE_SQL_properties_typeProperties_connectionString_secretName": {
+			"value": "DBSTRING"
+		},
+		"LS_BLOB_USING_KEY_VAULT_properties_typeProperties_connectionString_secretName": {
+			"value": "Blobstorage"
+		},
+		"LS_KEY_VAULT_properties_typeProperties_baseUrl": {
+			"value": "https://keyvaultblobstore.vault.azure.net/"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}

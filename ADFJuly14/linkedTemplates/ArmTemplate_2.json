@@ -1,0 +1,824 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "ADFJuly14"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/DelimitedText6')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_BLOB_USING_KEY_VAULT",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "dataflow"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "DEPT_ID",
+						"type": "String"
+					},
+					{
+						"name": "DEPT_NAME",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Json1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_BLOB_USING_KEY_VAULT",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "dataflow"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"partNo": {
+							"type": "string"
+						},
+						"PartDesc": {
+							"type": "string"
+						},
+						"Division": {
+							"type": "string"
+						},
+						"Plant": {
+							"type": "string"
+						},
+						"MRP": {
+							"type": "string"
+						},
+						"PRICE": {
+							"type": "string"
+						},
+						"GST": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Json2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_BLOB_USING_KEY_VAULT",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "SampleJSON.json",
+						"container": "dataflow"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"firstName": {
+							"type": "string"
+						},
+						"lastName": {
+							"type": "string"
+						},
+						"gender": {
+							"type": "string"
+						},
+						"age": {
+							"type": "integer"
+						},
+						"address": {
+							"type": "object",
+							"properties": {
+								"streetAddress": {
+									"type": "string"
+								},
+								"city": {
+									"type": "string"
+								},
+								"state": {
+									"type": "string"
+								}
+							}
+						},
+						"phoneNumbers": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"type": {
+										"type": "string"
+									},
+									"number": {
+										"type": "string"
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Json3')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_BLOB_USING_KEY_VAULT",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "employee.json",
+						"container": "dataflow"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"firstName": {
+							"type": "string"
+						},
+						"lastName": {
+							"type": "string"
+						},
+						"gender": {
+							"type": "string"
+						},
+						"age": {
+							"type": "integer"
+						},
+						"address": {
+							"type": "object",
+							"properties": {
+								"State": {
+									"type": "string"
+								},
+								"country": {
+									"type": "string"
+								},
+								"ZIP": {
+									"type": "string"
+								}
+							}
+						},
+						"skills": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/OUTPUT')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_BLOB_USING_KEY_VAULT",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "dataflow"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_AGGRRIGATE')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_TXT_BLOB",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_TARGET_BLOB",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "Aggregate1"
+						}
+					],
+					"script": "source(output(\n\t\temp_id as integer '000',\n\t\temp_name as string,\n\t\t{ emp_sal} as integer '000',\n\t\temp_location as string,\n\t\temp_deptID as integer '000'\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 aggregate(groupBy(emp_deptID),\n\tSumOfSalary = sum({ emp_sal})) ~> Aggregate1\nAggregate1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['empDetails_Salary.txt'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tmapColumn(\n\t\temp_deptID,\n\t\tSumOfSalary\n\t),\n\tpartitionBy('hash', 1)) ~> sink1"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_CONDITIOANAL_SPLIT')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_BLOB_TEXT_DF",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_CSV_TARGET",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_JSON",
+								"type": "DatasetReference"
+							},
+							"name": "sink2"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_TARGET_TEXT",
+								"type": "DatasetReference"
+							},
+							"name": "sink3"
+						}
+					],
+					"transformations": [
+						{
+							"name": "Split"
+						}
+					],
+					"script": "source(output(\n\t\tpartNo as string,\n\t\tPartDesc as string,\n\t\tDivision as string,\n\t\tPlant as string,\n\t\tMRP as string,\n\t\tPRICE as string,\n\t\tGST as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 split(Division == '11',\n\tDivision == '22',\n\tdisjoint: false) ~> Split@(DIVISION11, DIVISION22, OTHERS)\nSplit@DIVISION11 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['MaterialMaster_Division11.csv'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink1\nSplit@DIVISION22 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['MaterialMaster_22.json'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink2\nSplit@OTHERS sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['MaterialMaster.txt'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink3"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_EXISTS')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_EMP_CSV",
+								"type": "DatasetReference"
+							},
+							"name": "EMP"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_DEPT_CSV",
+								"type": "DatasetReference"
+							},
+							"name": "DEPT"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DelimitedText3",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "Exists1"
+						}
+					],
+					"script": "source(output(\n\t\tEMP_ID as integer,\n\t\tNAME as string,\n\t\tDEPT_ID as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> EMP\nsource(output(\n\t\tDEPT_ID as integer,\n\t\tDEPT_NAME as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> DEPT\nEMP, DEPT exists(EMP@DEPT_ID == DEPT@DEPT_ID,\n\tnegate:true,\n\tbroadcast: 'auto')~> Exists1\nExists1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['EXITS.csv'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink1"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_FLATTERN')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_JSON_FLATTERN",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DelimitedText6",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "Flatten1"
+						}
+					],
+					"script": "source(output(\n\t\tfirstName as string,\n\t\tlastName as string,\n\t\tgender as string,\n\t\tage as string,\n\t\taddress as (State as string, country as string, ZIP as string),\n\t\tskills as string[]\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tlimit: 100,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'singleDocument',\n\tpartitionBy('hash', 1)) ~> source1\nsource1 foldDown(unroll(skills),\n\tmapColumn(\n\t\tskills,\n\t\tfirstName,\n\t\tgender,\n\t\tage\n\t),\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> Flatten1\nFlatten1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tDEPT_ID as string,\n\t\tDEPT_NAME as string\n\t),\n\tpartitionFileNames:['flat.csv'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink1"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DelimitedText6')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_LOOKUP')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "AzureSqlTable1",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						},
+						{
+							"dataset": {
+								"referenceName": "AzureSqlTable2",
+								"type": "DatasetReference"
+							},
+							"name": "source2"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "AzureSqlTable5",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "LOOKUPEXAM"
+						},
+						{
+							"name": "Select1"
+						}
+					],
+					"script": "source(output(\n\t\tEMP_ID as integer,\n\t\temp_name as string,\n\t\temp_sal as integer,\n\t\temp_location as string,\n\t\tdept_id as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> source1\nsource(output(\n\t\tDept_id as integer,\n\t\tdept_name as string,\n\t\tdept_location as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> source2\nsource1, source2 lookup(source1@dept_id == source2@Dept_id,\n\tmultiple: false,\n\tpickup: 'any',\n\tpartitionBy('hash', 1),\n\tbroadcast: 'auto')~> LOOKUPEXAM\nLOOKUPEXAM select(mapColumn(\n\t\tEMPLOYEEID = EMP_ID,\n\t\tNAME = emp_name,\n\t\temp_sal,\n\t\temp_location,\n\t\tdept_id_EMP = source1@dept_id,\n\t\tDept_id = source2@Dept_id,\n\t\tdept_name,\n\t\tdept_location\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nSelect1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_PARSE')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_SQL_PARSE",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						},
+						{
+							"dataset": {
+								"referenceName": "Avro2",
+								"type": "DatasetReference"
+							},
+							"name": "source2"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "Avro1",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "Parse1"
+						},
+						{
+							"name": "Parse2"
+						}
+					],
+					"script": "source(output(\n\t\temp_name as string,\n\t\tgender as string,\n\t\tskills as string,\n\t\taddress as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table',\n\tpartitionBy('hash', 1)) ~> source1\nsource(output(\n\t\temp_name as string,\n\t\tgender as string,\n\t\tskills as string,\n\t\taddress as string,\n\t\tParseSkill as (skill1 as string, skill2 as string, skill3 as string),\n\t\tParseAddress as (state as string, country as string)\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source2\nsource1 parse(ParseSkill = skills ? (skill1 as string,\n\t\tskill2 as string,\n\t\tskill3 as string),\n\tformat: 'delimited',\n\tcolumnNamesAsHeader: false,\n\tcolumnDelimiter: '|',\n\tnullValue: '') ~> Parse1\nParse1 parse(ParseAddress = address ? (state as string,\n\t\tcountry as string),\n\tformat: 'json',\n\tdocumentForm: 'singleDocument') ~> Parse2\nParse2 sink(allowSchemaDrift: true,\n\tvalidateSchema: true,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink1"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_SURROGATE_KEY')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_PROC",
+								"type": "DatasetReference"
+							},
+							"name": "MAXID"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_CSV",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_SQL_STATEMASTER",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "Join1"
+						},
+						{
+							"name": "SurrogateKey1"
+						},
+						{
+							"name": "DerivedColumn1"
+						}
+					],
+					"script": "source(output(\n\t\tmax_ID as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tlimit: 100,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tprocedureName: 'sp_get_maxID',\n\tschemaName: 'dbo',\n\tresultSet: true,\n\tformat: 'procedure',\n\tpartitionBy('hash', 1)) ~> MAXID\nsource(output(\n\t\tName as string,\n\t\tcountry as string,\n\t\tActive as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tlimit: 100,\n\tignoreNoFilesFound: false) ~> source1\nMAXID, source1 join(1==1,\n\tjoinType:'cross',\n\tpartitionBy('hash', 1),\n\tbroadcast: 'auto')~> Join1\nJoin1 keyGenerate(output(STATEID as long),\n\tstartAt: 1L,\n\tpartitionBy('hash', 1)) ~> SurrogateKey1\nSurrogateKey1 derive(SrNo = toInteger(max_ID+STATEID),\n\tpartitionBy('hash', 1)) ~> DerivedColumn1\nDerivedColumn1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tSTateID as integer,\n\t\tName as string,\n\t\tcountry as string,\n\t\tActive as string\n\t),\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\tSTateID = SrNo,\n\t\tName,\n\t\tcountry,\n\t\tActive\n\t)) ~> sink1"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_WINDOW')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DelimitedText4",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DelimitedText5",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "Window1"
+						}
+					],
+					"script": "source(output(\n\t\tEMPID as integer,\n\t\tEMPNAME as string,\n\t\tDEPT as string,\n\t\tGENDER as string,\n\t\tSALARY as double\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 window(over(DEPT),\n\tdesc(SALARY, true),\n\tDenseRank = denseRank(),\n\tpartitionBy('hash', 1)) ~> Window1\nWindow1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tDEPT_ID as string,\n\t\tDEPT_NAME as string\n\t),\n\tpartitionFileNames:['window_Dense.csv'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink1"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_REMOVE_DUPLICATES')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_TEST",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_TARGET_BLOB",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "Aggregate1"
+						}
+					],
+					"script": "source(output(\n\t\temp_id as integer,\n\t\temp_name as string,\n\t\t{ emp_sal} as string,\n\t\temp_location as string,\n\t\temp_deptID as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 aggregate(groupBy(emp_id),\n\teach(match(name!='emp_id'), $$ = last($$))) ~> Aggregate1\nAggregate1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['RemoveDuplicates.txt'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tmapColumn(\n\t\temp_id,\n\t\temp_name,\n\t\t{ emp_sal},\n\t\temp_location,\n\t\temp_deptID\n\t),\n\tpartitionBy('hash', 1)) ~> sink1"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/UNION')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_Smaster",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_target2",
+								"type": "DatasetReference"
+							},
+							"name": "source2"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "Json1",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "Union1"
+						}
+					],
+					"script": "source(output(\n\t\tName as string,\n\t\tcountry as string,\n\t\tActive as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource(output(\n\t\tName as string,\n\t\tcountry as string,\n\t\tActive as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source2\nsource1, source2 union(byName: true,\n\tpartitionBy('hash', 1))~> Union1\nUnion1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tpartNo as string,\n\t\tPartDesc as string,\n\t\tDivision as string,\n\t\tPlant as string,\n\t\tMRP as string,\n\t\tPRICE as string,\n\t\tGST as string\n\t),\n\tpartitionFileNames:['unionData.json'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink1"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/Json1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/condition')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_BLOB_TEXT_FILE",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_BLOB_TARGET",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_BLOB_TARGET",
+								"type": "DatasetReference"
+							},
+							"name": "sink2"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_BLOB_TEXT_FILE",
+								"type": "DatasetReference"
+							},
+							"name": "sink3"
+						}
+					],
+					"transformations": [
+						{
+							"name": "ConditionalSplit1"
+						}
+					],
+					"script": "source(output(\n\t\tpartNo as string,\n\t\tPartDesc as string,\n\t\tDivision as string,\n\t\tPlant as string,\n\t\tMRP as string,\n\t\tPRICE as string,\n\t\tGST as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 split(Division == '11',\n\tDivision == '22',\n\tdisjoint: false,\n\tpartitionBy('hash', 1)) ~> ConditionalSplit1@(DIVISION11, DIVISION22, Others)\nConditionalSplit1@DIVISION11 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['TPartsMaster_11.txt'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink1\nConditionalSplit1@DIVISION22 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['TPartsMaster_22.txt'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink2\nConditionalSplit1@Others sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tpartNo as string,\n\t\tPartDesc as string,\n\t\tDivision as string,\n\t\tPlant as string,\n\t\tMRP as string,\n\t\tPRICE as string,\n\t\tGST as string\n\t),\n\tpartitionFileNames:['TPartsMaster_75.txt'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink3"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dataflow1')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DelimitedText1",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DelimitedText2",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "Pivot1"
+						}
+					],
+					"script": "source(output(\n\t\tEmP_ID as integer,\n\t\tNAME as string,\n\t\tDEPT as string,\n\t\tSALARY as double,\n\t\tLOCATION as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 pivot(groupBy(DEPT),\n\tpivotBy(LOCATION),\n\t{} = sum(toInteger(SALARY)),\n\tcolumnNaming: '$N$V',\n\tlateral: true) ~> Pivot1\nPivot1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['pivot.csv'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink1"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_PIVOT')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_PIVOT",
+								"type": "DatasetReference"
+							},
+							"name": "EMP"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_SQL_PIVOT_TABLE",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "PivotEMP"
+						}
+					],
+					"script": "source(output(\n\t\tEmP_ID as integer,\n\t\tNAME as string,\n\t\tDEPT as string,\n\t\tSALARY as long,\n\t\tLOCATION as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tlimit: 100,\n\tignoreNoFilesFound: false) ~> EMP\nEMP pivot(groupBy(DEPT),\n\tpivotBy(LOCATION),\n\t{} = sum(toInteger(SALARY)),\n\tcolumnNaming: '$N$V',\n\tlateral: true,\n\tpartitionBy('hash', 1)) ~> PivotEMP\nPivotEMP sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError',\n\tpartitionBy('hash', 1)) ~> sink1"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_DATA_FLOWS')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "DF_PARSE",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"source2": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"annotations": [],
+				"lastPublishTime": "2021-07-25T03:23:51Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/DF_PARSE')]"
+			]
+		}
+	]
+}
